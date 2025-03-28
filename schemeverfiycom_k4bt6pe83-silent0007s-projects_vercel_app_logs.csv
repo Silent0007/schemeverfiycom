@@ -1,2 +1,548 @@
-path_name,size
-/Index.HTML.pdf,169981
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Bharat Scheme Saarthi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    :root {
+      --saffron: #FF9933;
+      --white: #FFFFFF;
+      --green: #138808;
+      --blue: #000080;
+      --dark: #1e293b;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f0f4f8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--saffron), var(--white), var(--green));
+      color: var(--blue);
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tab-btn {
+      padding: 12px 24px;
+      border: 2px solid var(--blue);
+      border-radius: 25px;
+      cursor: pointer;
+      background: var(--white);
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn.active {
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    .card {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .scheme-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .scheme-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border-left: 4px solid var(--saffron);
+      transition: transform 0.3s ease;
+    }
+
+    .common-docs {
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      padding: 2rem;
+      color: #64748b;
+    }
+
+    /* New styles for compare section */
+    .compare-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .compare-select {
+      flex: 1;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    
+    .comparison-table th, .comparison-table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    
+    .comparison-table th {
+      background-color: var(--blue);
+      color: white;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    
+    /* Verification history styles */
+    .history-item {
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 8px;
+      background: #f8fafc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .history-item.verified {
+      border-left: 4px solid var(--green);
+    }
+    
+    .history-item.unverified {
+      border-left: 4px solid var(--saffron);
+    }
+    
+    .history-item.invalid {
+      border-left: 4px solid #ef4444;
+    }
+    
+    .history-date {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+    
+    .clear-history {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🇮🇳 Digital Bharat Saarthi</h1>
+    <p>Authentic Government Scheme Information Portal</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showSection('verify', event)">
+      <i class="fas fa-shield-alt"></i> Verify Portal
+    </button>
+    <button class="tab-btn" onclick="showSection('schemes', event)">
+      <i class="fas fa-list-ul"></i> Key Schemes
+    </button>
+    <button class="tab-btn" onclick="showSection('compare', event)">
+      <i class="fas fa-exchange-alt"></i> Compare Schemes
+    </button>
+    <button class="tab-btn" onclick="showSection('documents', event)">
+      <i class="fas fa-file-alt"></i> Common Documents
+    </button>
+    <button class="tab-btn" onclick="showSection('history', event)">
+      <i class="fas fa-history"></i> Verification History
+    </button>
+  </div>
+
+  <!-- Verification Section -->
+  <div class="card" id="verifySection">
+    <h2>Verify Government Website</h2>
+    <div class="input-group">
+      <input type="url" id="websiteUrl" placeholder="Enter website URL (e.g. https://pmkisan.gov.in)" 
+             style="width: 100%; padding: 12px; margin-bottom: 1rem;">
+    </div>
+    <button class="btn" onclick="verifyWebsite()" 
+            style="background: var(--blue); color: white; padding: 12px 24px; border: none; border-radius: 5px;">
+      Verify Authenticity
+    </button>
+    <div id="verificationResult" style="margin-top: 1.5rem;"></div>
+  </div>
+
+  <!-- Schemes Section -->
+  <div class="card" id="schemesSection" style="display:none;">
+    <h2>Major Government Schemes</h2>
+    <div class="scheme-grid" id="schemeContainer"></div>
+  </div>
+
+  <!-- Compare Schemes Section -->
+  <div class="card" id="compareSection" style="display:none;">
+    <h2>Compare Government Schemes</h2>
+    <div class="compare-container">
+      <select class="compare-select" id="scheme1">
+        <option value="">Select first scheme</option>
+      </select>
+      <select class="compare-select" id="scheme2">
+        <option value="">Select second scheme</option>
+      </select>
+    </div>
+    <button class="btn" onclick="compareSchemes()" 
+            style="background: var(--blue); color: white; padding: 12px 24px; border: none; border-radius: 5px;">
+      Compare Schemes
+    </button>
+    <div id="comparisonResult" style="margin-top: 1.5rem;"></div>
+  </div>
+
+  <!-- Documents Section -->
+  <div class="card" id="documentsSection" style="display:none;">
+    <h2>Commonly Required Documents</h2>
+    <div class="common-docs">
+      <ul id="documentsList" style="columns: 2; list-style: none; padding: 0;">
+        <!-- Documents loaded via JS -->
+      </ul>
+    </div>
+  </div>
+
+  <!-- Verification History Section -->
+  <div class="card" id="historySection" style="display:none;">
+    <h2>Verification History</h2>
+    <div id="verificationHistory">
+      <p>Your verification history will appear here</p>
+    </div>
+    <button class="clear-history" onclick="clearVerificationHistory()">
+      <i class="fas fa-trash-alt"></i> Clear History
+    </button>
+  </div>
+
+  <footer>
+    <p>Empowering Citizens Through Verified Information</p>
+    <div style="margin-top: 1rem;">
+      <i class="fas fa-code"></i> Created with ❤️ by Sarthak Lande
+    </div>
+  </footer>
+
+  <script>
+    // Realistic Scheme Database including Job Card Scheme
+    const schemes = [
+      {
+        name: "PM Kisan Samman Nidhi",
+        category: "Agriculture",
+        description: "₹6,000/year income support to farmers",
+        documents: ["Aadhaar Card", "Land ownership documents", "Bank account details"],
+        website: "https://pmkisan.gov.in",
+        helpline: "1800-115-566",
+        launched: "2018",
+        eligibility: "Small and marginal farmers",
+        benefits: "₹6,000 per year in 3 installments"
+      },
+      {
+        name: "Ayushman Bharat Yojana",
+        category: "Healthcare",
+        description: "Health insurance coverage up to ₹5 lakh/year",
+        documents: ["Aadhaar Card", "Income certificate", "Ration card"],
+        website: "https://pmjay.gov.in",
+        helpline: "14555",
+        launched: "2018",
+        eligibility: "Economically weaker sections",
+        benefits: "Health cover of ₹5 lakh per family per year"
+      },
+      {
+        name: "National Scholarship Portal",
+        category: "Education",
+        description: "Single platform for all education scholarships",
+        documents: ["Aadhaar", "Income certificate", "Educational documents"],
+        website: "https://scholarships.gov.in",
+        helpline: "0120-6619540",
+        launched: "2012",
+        eligibility: "Students from various categories",
+        benefits: "Varies by scholarship type"
+      },
+      {
+        name: "MGNREGA Job Card Scheme",
+        category: "Employment",
+        description: "Guarantees 100 days of wage employment per rural household",
+        documents: ["Aadhaar Card", "Ration Card", "Passport Photo", "Bank Account Details"],
+        website: "https://nrega.nic.in",
+        helpline: "1800-345-6770",
+        launched: "2006",
+        eligibility: "Rural households",
+        benefits: "100 days of guaranteed wage employment"
+      }
+    ];
+
+    // Common Documents List
+    const commonDocuments = [
+      "Aadhaar Card",
+      "PAN Card",
+      "Address Proof",
+      "Income Certificate",
+      "Bank Account Details",
+      "Passport Size Photograph",
+      "Caste Certificate (if applicable)",
+      "Domicile Certificate",
+      "Ration Card",
+      "Mobile Number Linked with Aadhaar"
+    ];
+
+    // Verification history array
+    let verificationHistory = JSON.parse(localStorage.getItem('verificationHistory')) || [];
+
+    // Initialize Application
+    function init() {
+      loadSchemes();
+      loadDocuments();
+      loadSchemeOptions();
+      loadVerificationHistory();
+    }
+
+    function loadSchemes() {
+      const container = document.getElementById('schemeContainer');
+      container.innerHTML = schemes.map(scheme => `
+        <div class="scheme-card">
+          <h3>${scheme.name}</h3>
+          <p><i class="fas fa-info-circle"></i> ${scheme.description}</p>
+          <div class="common-docs">
+            <p><strong><i class="fas fa-file-alt"></i> Required Documents:</strong></p>
+            <ul>${scheme.documents.map(doc => `<li>${doc}</li>`).join('')}</ul>
+          </div>
+          <div style="margin-top: 1rem;">
+            <button class="btn" onclick="window.open('${scheme.website}', '_blank')"
+                    style="background: var(--green); color: white; padding: 8px 16px;">
+              <i class="fas fa-external-link-alt"></i> Official Site
+            </button>
+            <span style="margin-left: 1rem;"><i class="fas fa-phone"></i> ${scheme.helpline}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function loadDocuments() {
+      const list = document.getElementById('documentsList');
+      list.innerHTML = commonDocuments.map(doc => `
+        <li style="padding: 8px 0;"><i class="fas fa-check-circle" style="color: var(--green);"></i> ${doc}</li>
+      `).join('');
+    }
+
+    function loadSchemeOptions() {
+      const scheme1Select = document.getElementById('scheme1');
+      const scheme2Select = document.getElementById('scheme2');
+      
+      schemes.forEach(scheme => {
+        const option = document.createElement('option');
+        option.value = scheme.name;
+        option.textContent = scheme.name;
+        
+        scheme1Select.appendChild(option.cloneNode(true));
+        scheme2Select.appendChild(option.cloneNode(true));
+      });
+    }
+
+    function loadVerificationHistory() {
+      const historyContainer = document.getElementById('verificationHistory');
+      
+      if (verificationHistory.length === 0) {
+        historyContainer.innerHTML = '<p>No verification history found</p>';
+        return;
+      }
+      
+      historyContainer.innerHTML = verificationHistory.map(item => `
+        <div class="history-item ${item.status}">
+          <div>
+            <strong>${item.url}</strong>
+            <div class="history-date">${new Date(item.timestamp).toLocaleString()}</div>
+          </div>
+          <span>${item.status === 'verified' ? '✅ Verified' : item.status === 'invalid' ? '❌ Invalid' : '⚠️ Unverified'}</span>
+        </div>
+      `).join('');
+    }
+
+    function showSection(sectionId, event) {
+      document.querySelectorAll('.card').forEach(section => {
+        section.style.display = 'none';
+      });
+      document.getElementById(sectionId + 'Section').style.display = 'block';
+      
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    function verifyWebsite() {
+      const url = document.getElementById('websiteUrl').value;
+      const resultDiv = document.getElementById('verificationResult');
+      
+      try {
+        const domain = new URL(url).hostname;
+        const isGenuine = domain.endsWith('.gov.in') || domain.endsWith('.nic.in');
+        
+        // Add to verification history
+        const verificationEntry = {
+          url: domain,
+          status: isGenuine ? 'verified' : 'unverified',
+          timestamp: new Date().toISOString()
+        };
+        
+        verificationHistory.unshift(verificationEntry);
+        localStorage.setItem('verificationHistory', JSON.stringify(verificationHistory));
+        
+        resultDiv.innerHTML = isGenuine ? `
+          <div style="background: #e6fcf7; padding: 1rem; border-radius: 8px; border-left: 4px solid #10b981;">
+            <h3 style="color: #10b981;"><i class="fas fa-check-circle"></i> Verified Government Website</h3>
+            <p>${domain} is an official government portal</p>
+            <button class="btn" onclick="window.open('${url}', '_blank')"
+                    style="background: var(--blue); margin-top: 1rem;">
+              Visit Official Site
+            </button>
+          </div>
+        ` : `
+          <div style="background: #ffe3e3; padding: 1rem; border-radius: 8px; border-left: 4px solid #ef4444;">
+            <h3 style="color: #ef4444;"><i class="fas fa-exclamation-triangle"></i> Unverified Website</h3>
+            <p>This domain doesn't appear to be an official government portal</p>
+            <div style="margin-top: 1rem;">
+              <p>Report suspicious websites to: <strong>1930</strong></p>
+            </div>
+          </div>
+        `;
+      } catch {
+        // Add invalid entry to history
+        verificationHistory.unshift({
+          url: url,
+          status: 'invalid',
+          timestamp: new Date().toISOString()
+        });
+        localStorage.setItem('verificationHistory', JSON.stringify(verificationHistory));
+        
+        resultDiv.innerHTML = `
+          <div style="background: #ffe3e3; padding: 1rem; border-radius: 8px; border-left: 4px solid #ef4444;">
+            <h3 style="color: #ef4444;"><i class="fas fa-times-circle"></i> Invalid URL Format</h3>
+            <p>Please enter a complete website URL including http:// or https://</p>
+          </div>
+        `;
+      }
+      
+      // Refresh history display
+      loadVerificationHistory();
+    }
+
+    function compareSchemes() {
+      const scheme1Name = document.getElementById('scheme1').value;
+      const scheme2Name = document.getElementById('scheme2').value;
+      const resultDiv = document.getElementById('comparisonResult');
+      
+      if (!scheme1Name || !scheme2Name) {
+        resultDiv.innerHTML = `
+          <div style="background: #fff3bf; padding: 1rem; border-radius: 8px; border-left: 4px solid #fcc419;">
+            <h3 style="color: #f08c00;"><i class="fas fa-exclamation-circle"></i> Selection Required</h3>
+            <p>Please select two schemes to compare</p>
+          </div>
+        `;
+        return;
+      }
+      
+      const scheme1 = schemes.find(s => s.name === scheme1Name);
+      const scheme2 = schemes.find(s => s.name === scheme2Name);
+      
+      resultDiv.innerHTML = `
+        <table class="comparison-table">
+          <tr>
+            <th>Feature</th>
+            <th>${scheme1.name}</th>
+            <th>${scheme2.name}</th>
+          </tr>
+          <tr>
+            <td>Category</td>
+            <td>${scheme1.category}</td>
+            <td>${scheme2.category}</td>
+          </tr>
+          <tr>
+            <td>Description</td>
+            <td>${scheme1.description}</td>
+            <td>${scheme2.description}</td>
+          </tr>
+          <tr>
+            <td>Launched</td>
+            <td>${scheme1.launched}</td>
+            <td>${scheme2.launched}</td>
+          </tr>
+          <tr>
+            <td>Eligibility</td>
+            <td>${scheme1.eligibility}</td>
+            <td>${scheme2.eligibility}</td>
+          </tr>
+          <tr>
+            <td>Benefits</td>
+            <td>${scheme1.benefits}</td>
+            <td>${scheme2.benefits}</td>
+          </tr>
+          <tr>
+            <td>Helpline</td>
+            <td>${scheme1.helpline}</td>
+            <td>${scheme2.helpline}</td>
+          </tr>
+          <tr>
+            <td>Documents Required</td>
+            <td><ul>${scheme1.documents.map(doc => `<li>${doc}</li>`).join('')}</ul></td>
+            <td><ul>${scheme2.documents.map(doc => `<li>${doc}</li>`).join('')}</ul></td>
+          </tr>
+          <tr>
+            <td>Official Website</td>
+            <td><a href="${scheme1.website}" target="_blank">Visit Site</a></td>
+            <td><a href="${scheme2.website}" target="_blank">Visit Site</a></td>
+          </tr>
+        </table>
+      `;
+    }
+
+    function clearVerificationHistory() {
+      if (confirm("Are you sure you want to clear your verification history?")) {
+        verificationHistory = [];
+        localStorage.setItem('verificationHistory', JSON.stringify(verificationHistory));
+        loadVerificationHistory();
+      }
+    }
+
+    // Initialize the application
+    init();
+  </script>
+</body>
+</html>
